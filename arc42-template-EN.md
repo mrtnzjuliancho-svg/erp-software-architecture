@@ -1,215 +1,202 @@
+fecha	título  
+Febrero de 2026  
+
+![arc42](./Docs/images/arc42-logo.png) Plantilla  
+
+Acerca de arc42  
+
+arc42, la plantilla para la documentación de software y arquitectura de sistemas.  
+
+Versión de plantilla 9.0-EN (basada en la versión AsciiDoc), febrero de 2026  
+
+Creado, mantenido y © por el Dr. Peter Hruschka, el Dr. Gernot Starke y colaboradores.  
+Véase https://arc42.org .  
+
 ---
-date: July 2025
-title: "![arc42](images/arc42-logo.png) Template"
+
+## Introducción y objetivos {#section-introduction-and-goals}
+
+### Descripción general de requisitos {#_requirements_overview}
+
+El Sistema ERP tiene como objetivo integrar y automatizar los principales procesos de negocio de la empresa.  
+Esta documentación se centra en el **Módulo de Compras**, encargado de la gestión de productos, proveedores y órdenes de compra.
+
+Requisitos de negocio más importantes del Módulo de Compras:
+- Registrar y mantener productos
+- Gestionar proveedores
+- Crear y consultar órdenes de compra
+- Mantener historial de compras
+- Integrarse con el sistema contable
+- Controlar accesos según roles de usuario
+
+### Objetivos de calidad {#_quality_goals}
+
+- **Usabilidad**: interfaz intuitiva para usuarios administrativos  
+- **Seguridad**: autenticación y autorización por roles  
+- **Mantenibilidad**: arquitectura modular y documentada  
+- **Escalabilidad**: posibilidad de crecimiento futuro  
+
+### Partes interesadas {#_stakeholders}
+
+| Rol/Nombre | Contacto | Expectativas |
+|-----------|----------|--------------|
+| Administrador de Compras | — | Gestionar productos, proveedores y órdenes |
+| Gerencia | — | Consultar reportes y estado del negocio |
+| Equipo de TI | — | Facilidad de mantenimiento y despliegue |
+
 ---
 
-# 
+## Restricciones de arquitectura {#section-architecture-constraints}
 
-**About arc42**
+- Backend desarrollado en **Java con Spring Boot**
+- Base de datos **PostgreSQL**
+- Frontend como **SPA en React**
+- Comunicación mediante **API REST**
+- Uso de **GitHub** para control de versiones y documentación
+- Posibilidad de despliegue mediante **contenedores Docker**
 
-arc42, the template for documentation of software and system
-architecture.
+---
 
-Template Version 9.0-EN. (based upon AsciiDoc version), July 2025
+## Contexto y alcance {#section-context-and-scope}
 
-Created, maintained and © by Dr. Peter Hruschka, Dr. Gernot Starke and
-contributors. See <https://arc42.org>.
+### Contexto empresarial {#_business_context}
 
-# Introduction and Goals {#section-introduction-and-goals}
+![Diagrama de Contexto](./Docs/images/c1_context.png)
 
-## Requirements Overview {#_requirements_overview}
+El Sistema ERP interactúa con usuarios internos (Administradores y Gerencia) y con sistemas externos como el sistema contable y los proveedores.
 
-## Quality Goals {#_quality_goals}
+Opcionalmente:  
+El ERP envía información contable al sistema externo y órdenes de compra a los proveedores.
 
-## Stakeholders {#_stakeholders}
+### Contexto técnico {#_technical_context}
 
-+-------------+---------------------------+---------------------------+
-| Role/Name   | Contact                   | Expectations              |
-+=============+===========================+===========================+
-| *           | *\<Contact-1\>*           | *\<Expectation-1\>*       |
-| \<Role-1\>* |                           |                           |
-+-------------+---------------------------+---------------------------+
-| *           | *\<Contact-2\>*           | *\<Expectation-2\>*       |
-| \<Role-2\>* |                           |                           |
-+-------------+---------------------------+---------------------------+
+El sistema utiliza una arquitectura cliente-servidor basada en servicios REST.  
+El frontend se comunica con el backend mediante HTTP/JSON y este persiste la información en una base de datos relacional.
 
-# Architecture Constraints {#section-architecture-constraints}
+---
 
-# Context and Scope {#section-context-and-scope}
+## Estrategia de solución {#section-solution-strategy}
 
-## Business Context {#_business_context}
+Se adopta una arquitectura en capas con separación clara entre presentación, lógica de negocio y persistencia, permitiendo mantenibilidad y escalabilidad.
 
-**\<Diagram or Table\>**
+---
 
-**\<optionally: Explanation of external domain interfaces\>**
+## Vista de bloque de construcción {#section-building-block-view}
 
-## Technical Context {#_technical_context}
+### Sistema general de caja blanca {#_whitebox_overall_system}
 
-**\<Diagram or Table\>**
+![Diagrama de Contenedores](./Docs/images/c2_containers.png)
 
-**\<optionally: Explanation of technical interfaces\>**
+#### Motivación
 
-**\<Mapping Input/Output to Channels\>**
+La división en contenedores permite desacoplar responsabilidades y facilitar el mantenimiento.
 
-# Solution Strategy {#section-solution-strategy}
+#### Bloques de construcción contenidos
 
-# Building Block View {#section-building-block-view}
+- Frontend Web
+- Backend API
+- Base de Datos
 
-## Whitebox Overall System {#_whitebox_overall_system}
+#### Interfaces importantes
 
-***\<Overview Diagram\>***
+- API REST entre Frontend y Backend
+- Integración con sistema contable externo
 
-Motivation
+### Frontend Web {#_name_black_box_1}
 
-:   *\<text explanation\>*
+Propósito / Responsabilidad:  
+Proporcionar la interfaz gráfica para la gestión del módulo de compras.
 
-Contained Building Blocks
+Interfaz(es):  
+Consume la API REST del backend.
 
-:   *\<Description of contained building block (black boxes)\>*
+### Backend API {#_name_black_box_2}
 
-Important Interfaces
+Propósito / Responsabilidad:  
+Implementar la lógica de negocio del ERP y gestionar la persistencia.
 
-:   *\<Description of important interfaces\>*
+Interfaz(es):  
+Expone servicios REST y se comunica con sistemas externos.
 
-### \<Name black box 1\> {#_name_black_box_1}
+---
 
-*\<Purpose/Responsibility\>*
+## Vista de tiempo de ejecución {#section-runtime-view}
 
-*\<Interface(s)\>*
+### Escenario de ejecución: Registrar un Producto {#_escenario_de_ejecución_1}
 
-*\<(Optional) Quality/Performance Characteristics\>*
+![Diagrama de Secuencia](./Docs/images/sequence_register_product.png)
 
-*\<(Optional) Directory/File Location\>*
+Descripción del escenario:
 
-*\<(Optional) Fulfilled Requirements\>*
+1. El Administrador de Compras accede al formulario de registro.
+2. Ingresa los datos del producto.
+3. El Frontend envía la solicitud al Backend.
+4. El Backend valida la información.
+5. El producto se guarda en la base de datos.
+6. El sistema confirma el registro al usuario.
 
-*\<(optional) Open Issues/Problems/Risks\>*
+---
 
-### \<Name black box 2\> {#_name_black_box_2}
+## Vista de implementación {#section-deployment-view}
 
-*\<black box template\>*
+### Infraestructura Nivel 1 {#_infrastructure_level_1}
 
-### \<Name black box n\> {#_name_black_box_n}
+El sistema se despliega en un servidor utilizando contenedores Docker:
 
-*\<black box template\>*
+- Contenedor Frontend
+- Contenedor Backend
+- Contenedor Base de Datos
 
-### \<Name interface 1\> {#_name_interface_1}
+Motivación:  
+Facilitar despliegue, escalabilidad y mantenimiento.
 
-...​
+---
 
-### \<Name interface m\> {#_name_interface_m}
+## Conceptos transversales {#section-concepts}
 
-## Level 2 {#_level_2}
+### Seguridad {#_concepto_1}
 
-### White Box *\<building block 1\>* {#_white_box_building_block_1}
+Autenticación y autorización basada en roles.
 
-*\<white box template\>*
+### Persistencia {#_concepto_2}
 
-### White Box *\<building block 2\>* {#_white_box_building_block_2}
+Uso de base de datos relacional PostgreSQL.
 
-*\<white box template\>*
+---
 
-...​
+## Decisiones de arquitectura {#section-design-decisions}
 
-### White Box *\<building block m\>* {#_white_box_building_block_m}
+- Uso de Spring Boot para acelerar el desarrollo
+- Separación frontend/backend
+- Uso de REST como mecanismo de comunicación
 
-*\<white box template\>*
+---
 
-## Level 3 {#_level_3}
+## Requisitos de calidad {#section-quality-scenarios}
 
-### White Box \<\_building block x.1\_\> {#_white_box_building_block_x_1}
+### Descripción general de los requisitos de calidad {#_quality_requirements_overview}
 
-*\<white box template\>*
+El sistema debe ser usable, seguro y fácil de mantener.
 
-### White Box \<\_building block x.2\_\> {#_white_box_building_block_x_2}
+### Escenarios de calidad {#_quality_scenarios}
 
-*\<white box template\>*
+- Un usuario autorizado puede registrar productos sin errores
+- El sistema responde en tiempos aceptables bajo carga normal
 
-### White Box \<\_building block y.1\_\> {#_white_box_building_block_y_1}
+---
 
-*\<white box template\>*
+## Riesgos y deudas técnicas {#section-technical-risks}
 
-# Runtime View {#section-runtime-view}
+- Dependencia de sistemas externos
+- Falta inicial de pruebas automatizadas
 
-## \<Runtime Scenario 1\> {#_runtime_scenario_1}
+---
 
--   *\<insert runtime diagram or textual description of the scenario\>*
+## Glosario {#section-glossary}
 
--   *\<insert description of the notable aspects of the interactions
-    between the building block instances depicted in this diagram.\>*
-
-## \<Runtime Scenario 2\> {#_runtime_scenario_2}
-
-## ...​
-
-## \<Runtime Scenario n\> {#_runtime_scenario_n}
-
-# Deployment View {#section-deployment-view}
-
-## Infrastructure Level 1 {#_infrastructure_level_1}
-
-***\<Overview Diagram\>***
-
-Motivation
-
-:   *\<explanation in text form\>*
-
-Quality and/or Performance Features
-
-:   *\<explanation in text form\>*
-
-Mapping of Building Blocks to Infrastructure
-
-:   *\<description of the mapping\>*
-
-## Infrastructure Level 2 {#_infrastructure_level_2}
-
-### *\<Infrastructure Element 1\>* {#_infrastructure_element_1}
-
-*\<diagram + explanation\>*
-
-### *\<Infrastructure Element 2\>* {#_infrastructure_element_2}
-
-*\<diagram + explanation\>*
-
-...​
-
-### *\<Infrastructure Element n\>* {#_infrastructure_element_n}
-
-*\<diagram + explanation\>*
-
-# Cross-cutting Concepts {#section-concepts}
-
-## *\<Concept 1\>* {#_concept_1}
-
-*\<explanation\>*
-
-## *\<Concept 2\>* {#_concept_2}
-
-*\<explanation\>*
-
-...​
-
-## *\<Concept n\>* {#_concept_n}
-
-*\<explanation\>*
-
-# Architecture Decisions {#section-design-decisions}
-
-# Quality Requirements {#section-quality-scenarios}
-
-## Quality Requirements Overview {#_quality_requirements_overview}
-
-## Quality Scenarios {#_quality_scenarios}
-
-# Risks and Technical Debts {#section-technical-risks}
-
-# Glossary {#section-glossary}
-
-+----------------------+-----------------------------------------------+
-| Term                 | Definition                                    |
-+======================+===============================================+
-| *\<Term-1\>*         | *\<definition-1\>*                            |
-+----------------------+-----------------------------------------------+
-| *\<Term-2\>*         | *\<definition-2\>*                            |
-+----------------------+-----------------------------------------------+
+| Término | Definición |
+|--------|------------|
+| Producto | Bien adquirido a proveedores |
+| Proveedor | Entidad externa que suministra productos |
+| Orden de Compra | Documento que formaliza la adquisición |
+| ERP | Sistema de Planificación de Recursos Empresariales |
